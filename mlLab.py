@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 plt.style.use('c:/Users/dalai/AppData/Local/Programs/Python/Python312/Lib/site-packages/matplotlib/mpl-data/stylelib/deeplearning.mplstyle')
 
 # I AM WRITING THIS FROM MY LAPTOP
+# AND I AM WRITING THIS FROM MY COMPUTER
 
 
 print(plt.style.available)
