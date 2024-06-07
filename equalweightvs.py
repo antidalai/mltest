@@ -6,4 +6,6 @@ import xlsxwriter
 import math
 
 # Getting our API token
-from my_secrets
+from my_secrets import IEX_CLOUD_API_TOKEN
+
+print(IEX_CLOUD_API_TOKEN)
