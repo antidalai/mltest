@@ -4,6 +4,7 @@ import matplotlib.ticker as mticker
 import matplotlib.dates as mdates
 import numpy as np
 import os
+import time
 from dateutil.parser import parse
 
 
@@ -19,7 +20,34 @@ def percentChange(startPoint, currentPoint):
     return ((currentPoint - startPoint) / startPoint) * 100 #   Calculate the percent change between the start and current
 
 
-print("This is the bid: ", bid)
+def patternFinder():
+    avgLine = (bid+ask)/2   # Finds the middle spot between bid and ask price
+    x = len(avgLine) - 30
+    y = 11
+
+    while y < x:
+        p1 = percentChange(avgLine[y-10], avgLine[y-9])
+        p2 = percentChange(avgLine[y-10], avgLine[y-8])
+        p3 = percentChange(avgLine[y-10], avgLine[y-7])
+        p4 = percentChange(avgLine[y-10], avgLine[y-6])
+        p5 = percentChange(avgLine[y-10], avgLine[y-5])
+        p6 = percentChange(avgLine[y-10], avgLine[y-4])
+        p7 = percentChange(avgLine[y-10], avgLine[y-3])
+        p8 = percentChange(avgLine[y-10], avgLine[y-2])
+        p9 = percentChange(avgLine[y-10], avgLine[y-1])
+        p10 = percentChange(avgLine[y-10], avgLine[y])
+
+        outcomeRange = avgLine[y+20:y+30]
+        currentPoint = avgLine[y]
+
+        print(sum(outcomeRange) / len(outcomeRange))
+        print(currentPoint)
+        print(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10)
+        y += 1
+        time.sleep(5555)
+
+
+#print("This is the bid: ", bid)
 
 # This whole function is dedicated to displaying data
 def graphRawFX():
@@ -41,3 +69,4 @@ def graphRawFX():
     plt.show()
 
 graphRawFX()
+patternFinder()
