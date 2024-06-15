@@ -13,10 +13,7 @@ def date_converter(date_string):
 date,bid,ask = np.loadtxt('GBPUSD1d.txt', unpack = True,  # need to add /mltest when on pc but not when on laptop
                               delimiter = ',', converters = {0: date_converter}) # This is using matplotlib.dates and stripping the string into proper date format
 
-avgLine = (bid+ask)/2   # Finds the middle spot between bid and ask price
-patternArr = [] # As we run pattern finder we will store the patterns in this array
-performanceArr = [] # Stores future performance of our patterns being stored in the above array
-patForRecog = [] # pattern for recognition / current pattern type of thing
+
 patStartTime = time.time()
 
 def percentChange(startPoint, currentPoint):
@@ -133,6 +130,10 @@ def currentPattern():
     print(patForRecog)
 
 def patternRecognition():
+
+    patFound = 0
+    pltPatArr = []
+
     for everyPattern in patternArr:
         sim1 = 100.0 - abs(percentChange(everyPattern[0], patForRecog[0])) # Finds how similar the pattern for recognition is in compared to our list of patterns
         sim2 = 100.0 - abs(percentChange(everyPattern[1], patForRecog[1]))
@@ -171,13 +172,22 @@ def patternRecognition():
                     sim11+sim12+sim13+sim14+sim15+sim16+sim17+sim18+sim19+sim20+
                     sim21+sim22+sim23+sim24+sim25+sim26+sim27+sim28+sim29+sim30)/30.0 # finds the average of all the similarity levels
 
-        if simLevel > 40:
+        if simLevel > 75:
             patdex = patternArr.index(everyPattern)
             xp = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27,28, 29, 30]
-            fig = plt.figure()
-            plt.plot(xp, patForRecog)
-            plt.plot(xp, everyPattern)
-            plt.show()
+            patFound = 1                # check for bool later
+            pltPatArr.append(everyPattern)
+            
+    if patFound == 1:    
+        fig = plt.figure(figsize=(10, 6))
+
+        for eachPatt in pltPatArr:
+            plt.plot(xp, eachPatt) 
+
+        plt.plot(xp, patForRecog, '#54fff7', linewidth=3)
+        plt.grid(True)
+        plt.title('Pattern Recognition') 
+        plt.show()
 # This whole function is dedicated to displaying data 
 def graphRawFX():
     fig = plt.figure(figure=(10,7))  # Essentially creates a blank canvas for drawing our plots
@@ -197,9 +207,27 @@ def graphRawFX():
     plt.grid(True)
     plt.show()
 
-#graphRawFX()
-patternStorage()
-currentPattern()
-patternRecognition()
-totalTime = time.time() - patStartTime 
-print("Entire process took: ", totalTime)
+
+
+
+dataLength = int(bid.shape[0]) # is how you get the size of a numpy array
+print("data length is ", dataLength)
+toPoint = 37000
+
+while toPoint < dataLength:
+    # defining global variables
+    avgLine = (bid+ask)/2   # Finds the middle spot between bid and ask price
+    avgLine = avgLine[:toPoint] # only consider the data we want to be considered
+    patternArr = [] # As we run pattern finder we will store the patterns in this array
+    performanceArr = [] # Stores future performance of our patterns being stored in the above array
+    patForRecog = [] # pattern for recognition / current pattern type of thing
+
+
+    # Calling functions
+    patternStorage() 
+    currentPattern()
+    patternRecognition()
+    totalTime = time.time() - patStartTime 
+    print("Entire process took: ", totalTime)
+    moveOn = input('press ENTER to continue...')
+    toPoint += 1
