@@ -182,6 +182,7 @@ def patternRecognition():
         fig = plt.figure(figsize=(10, 6))
 
         for eachPatt in pltPatArr:
+            futurePoints = patternArr.index(eachPatt)
             plt.plot(xp, eachPatt) 
 
         plt.plot(xp, patForRecog, '#54fff7', linewidth=3)
